@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.Globalization
+Imports System.IO
 
 Public Module FileFunctions
 
@@ -100,6 +101,21 @@ Public Module FileFunctions
 
     End Function
 
+    Public Function GetFoldersInDirectory(ByVal FolderPath As String, Optional IsGetSubFol As Boolean = False)
+
+        Dim ThisList As New List(Of String)
+
+        If IsFolderExisting(FolderPath) = True Then
+            For Each Dir As String In IO.Directory.GetDirectories(FolderPath)
+                ThisList.Add(Dir)
+                If IsGetSubFol = True Then GetFoldersInDirectory(Dir, IsGetSubFol)
+            Next Dir
+        End If
+
+        Return ThisList.ToArray
+
+    End Function
+
     Private Sub GetAllFilesInFolder(ByVal FolderPath As String, ByRef RetArr() As String,
                                    Optional FileType As String = vbNullString)
 
@@ -144,11 +160,29 @@ Public Module FileFunctions
 
     Public Function GetFolderName(ByVal FileString As String) As String
 
+        Dim RetString As String
+
         If FileString <> vbNullString Then
-            GetFolderName = Path.GetDirectoryName(FileString)
+            RetString = Path.GetDirectoryName(FileString)
         Else
-            GetFolderName = ErrMsg
+            RetString = ErrMsg
         End If
+
+        GetFolderName = RetString
+
+    End Function
+
+    Public Function GetFolderName_Last(ByVal FileString As String) As String
+
+        Dim RetString As String
+
+        If FileString <> vbNullString Then
+            RetString = FileString.Remove(0, FileString.Replace("/", "\").LastIndexOf("\") + 1).Trim
+        Else
+            RetString = ErrMsg
+        End If
+
+        GetFolderName_Last = RetString
 
     End Function
 

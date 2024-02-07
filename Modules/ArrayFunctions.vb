@@ -16,6 +16,22 @@ ErrHandler:
         On Error GoTo - 1
     End Function
 
+    Public Function IsArrEmpty(ByRef DataArr() As Double) As Boolean
+
+        Dim Index As Long
+
+        On Error GoTo ErrHandler
+
+        IsArrEmpty = True
+        Index = UBound(DataArr)
+        IsArrEmpty = False
+
+        Exit Function
+
+ErrHandler:
+        On Error GoTo - 1
+    End Function
+
     Public Function ArrayRemoveEndEmpty(ByVal InputArr() As String)
 
         Dim ReturnArr() As String
